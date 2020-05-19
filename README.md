@@ -1,9 +1,9 @@
 # switch-bot
-Help Henry get his toys
+Help Henry get his toy
 
 # Installation
-- install node and npm
-- install git
-- git clone this repo and cd into the directory
+- install node, npm, and git
 - npm install
+
+# Run
 - npm start
