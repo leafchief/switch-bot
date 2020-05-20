@@ -12,6 +12,8 @@ Help Henry get his toy
    "url": "url at target",
    "email": "target user email",
    "password": "target password",
+   "credit": "credit card number, no spaces or dashes"
+   "cvv": "credit card validation"
 }
 ```
 
