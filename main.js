@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const {Spinner} = require('cli-spinner');
 const notifier = require('node-notifier');
 
-const {url, email, password, credit, cvv} = JSON.parse(fs.readFileSync('settings.json'));
+const {url, email, password, credit, cvv, retries=10} = JSON.parse(fs.readFileSync('settings.json'));
 
 const spinner = new Spinner('%s');
 spinner.setSpinnerString(18);
@@ -33,12 +33,20 @@ const target2 = async() => {
     headless: false
   });
   const page = await browser.newPage();
-  await page.goto(url);
 
   try {
-    await page.waitFor('[data-test="shipping"]');
-    
-    const act = await page.$('[data-test="shippingATCButton"]');
+    let i = retries;
+    let act;
+    while (i) {
+      await page.goto(url);
+      await page.waitFor('[data-test="shipping"]');
+      act = await page.waitFor('[data-test="shippingATCButton"]')
+      if (act) break;
+
+      await page.waitFor(500);
+      i--;
+    }
+
     await act.click();
     const decline = await page.waitFor('[data-test="espModalContent-declineCoverageButton"]');
     await decline.click()
